@@ -11,6 +11,12 @@ let campgrounds = [
     { name: 'Salmon Creek', image: '/images/camp_1.jpg' },
     { name: 'Granite Hill', image: '/images/camp_2.jpg' },
     { name: 'Mountain Goat\'s Rest', image: '/images/camp_3.jpg' },
+    { name: 'Salmon Creek', image: '/images/camp_1.jpg' },
+    { name: 'Granite Hill', image: '/images/camp_2.jpg' },
+    { name: 'Mountain Goat\'s Rest', image: '/images/camp_3.jpg' },
+    { name: 'Salmon Creek', image: '/images/camp_1.jpg' },
+    { name: 'Granite Hill', image: '/images/camp_2.jpg' },
+    { name: 'Mountain Goat\'s Rest', image: '/images/camp_3.jpg' },
 ];
 
 app.get('/', (req, res) => {
