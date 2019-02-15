@@ -4,7 +4,7 @@ const express    = require('express'),
       port       = 3000,
       mongoose   = require('mongoose');
 
-mongoose.connect('mongodb://localhost/canopy');
+mongoose.connect('mongodb://localhost:27017/canopy', {useNewUrlParser: true});
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
