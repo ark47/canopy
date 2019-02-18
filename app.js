@@ -2,20 +2,15 @@ const express    = require('express'),
       app        = express(),
       bodyParser = require('body-parser'),
       port       = 3000,
-      mongoose   = require('mongoose');
+      mongoose   = require('mongoose'),
+      Campground = require('./models/campground'),
+      seedDB     = require('./seeds');
 
+seedDB();
 mongoose.connect('mongodb://localhost:27017/canopy', {useNewUrlParser: true});
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
-
-const campgroundSchema = new mongoose.Schema({
-    name: String,
-    image: String,
-    description: String
-});
-
-const Campground = mongoose.model('Campground', campgroundSchema);
 
 app.get('/', (req, res) => {
     res.render('landing');
@@ -50,10 +45,11 @@ app.get('/campgrounds/new', (req, res) => {
 });
 
 app.get('/campgrounds/:id', (req, res) => {
-    Campground.findById(req.params.id, (error, foundCampground) => {
+    Campground.findById(req.params.id).populate('comments').exec((error, foundCampground) => {
         if (error) {
             console.log(error);
         } else {
+            console.log(foundCampground);
             res.render('show', {campground: foundCampground});
         }
     });
