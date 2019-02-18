@@ -21,7 +21,7 @@ app.get('/campgrounds', (req, res) => {
         if (error) {
             console.log(error)
         } else {
-            res.render('index', {campgrounds: campgrounds})
+            res.render('campgrounds/index', {campgrounds: campgrounds})
         }
     })
 });
@@ -41,7 +41,7 @@ app.post('/campgrounds', (req, res) => {
 });
 
 app.get('/campgrounds/new', (req, res) => {
-    res.render('new');
+    res.render('campgrounds/new');
 });
 
 app.get('/campgrounds/:id', (req, res) => {
@@ -49,10 +49,25 @@ app.get('/campgrounds/:id', (req, res) => {
         if (error) {
             console.log(error);
         } else {
-            console.log(foundCampground);
-            res.render('show', {campground: foundCampground});
+            res.render('campgrounds/show', {campground: foundCampground});
         }
     });
+});
+
+//::::::::::::COMMENTS ROUTE::::::::::::://
+
+app.get('/campgrounds/:id/comments/new', (req, res) => {
+    Campground.findById(req.params.id, (error, campground) => {
+        if (error) {
+            console.log(error);
+        } else {
+            res.render('comments/new', {campground: campground});
+        }
+    })
+});
+
+app.post('/campgrounds/:id/comments', (req, res) => {
+    
 });
 
 app.listen(port, () => console.log(`Server started at port ${port}.`));
