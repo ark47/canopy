@@ -4,6 +4,7 @@ const express    = require('express'),
       port       = 3000,
       mongoose   = require('mongoose'),
       Campground = require('./models/campground'),
+      Comment    = require('./models/comment'),
       seedDB     = require('./seeds');
 
 seedDB();
@@ -67,7 +68,22 @@ app.get('/campgrounds/:id/comments/new', (req, res) => {
 });
 
 app.post('/campgrounds/:id/comments', (req, res) => {
-    
+    Campground.findById(req.params.id, (error, campground) => {
+        if (error) {
+            console.log(error);
+            res.redirect('/campgrounds');
+        } else {
+            Comment.create(req.body.comment, (error, comment) => {
+                if (error) {
+                    console.log(error);
+                } else {
+                    campground.comments.push(comment);
+                    campground.save();
+                    res.redirect('/campgrounds/' + campground._id);
+                }
+            });
+        }
+    });
 });
 
 app.listen(port, () => console.log(`Server started at port ${port}.`));
