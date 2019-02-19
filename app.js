@@ -3,8 +3,11 @@ const express    = require('express'),
       bodyParser = require('body-parser'),
       port       = 3000,
       mongoose   = require('mongoose'),
+      passport   = require('passport'),
+      localStrategy = require('passport-local'),
       Campground = require('./models/campground'),
       Comment    = require('./models/comment'),
+      User       = require('./models/user'),
       seedDB     = require('./seeds');
 
 seedDB();
