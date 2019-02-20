@@ -27,6 +27,11 @@ passport.use(new localStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+app.use((req, res, next) => {
+    res.locals.currentUser = req.user;
+    next();
+});
+
 app.get('/', (req, res) => {
     res.render('landing');
 });
@@ -36,7 +41,7 @@ app.get('/campgrounds', (req, res) => {
         if (error) {
             console.log(error)
         } else {
-            res.render('campgrounds/index', {campgrounds: campgrounds})
+            res.render('campgrounds/index', {campgrounds: campgrounds, currentUser: req.user})
         }
     });
 });
