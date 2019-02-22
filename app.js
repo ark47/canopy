@@ -13,7 +13,7 @@ const express    = require('express'),
       campgroundRoutes = require('./routes/campgrounds'),
       indexRoutes = require('./routes/index');
 
-seedDB();
+// seedDB();
 mongoose.connect('mongodb://localhost:27017/canopy', {useNewUrlParser: true});
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + '/public'));
