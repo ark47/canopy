@@ -2,7 +2,7 @@ footer {
     text-align: center;
 }
 
-#delete-form {
+.delete-form {
     display: inline;
 }
 

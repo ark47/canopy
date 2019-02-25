@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const Campground = require('../models/campground');
 const Comment = require('../models/comment');
+const middleware = require('../middleware');
 
-router.get('/campgrounds/:id/comments/new', isLoggedIn, (req, res) => {
+router.get('/campgrounds/:id/comments/new', middleware.isLoggedIn, (req, res) => {
     Campground.findById(req.params.id, (error, campground) => {
         if (error) {
             console.log(error);
@@ -13,7 +14,7 @@ router.get('/campgrounds/:id/comments/new', isLoggedIn, (req, res) => {
     })
 });
 
-router.post('/campgrounds/:id/comments', isLoggedIn, (req, res) => {
+router.post('/campgrounds/:id/comments', middleware.isLoggedIn, (req, res) => {
     Campground.findById(req.params.id, (error, campground) => {
         if (error) {
             console.log(error);
@@ -35,7 +36,7 @@ router.post('/campgrounds/:id/comments', isLoggedIn, (req, res) => {
     });
 });
 
-router.get('/campgrounds/:id/comments/:comment_id/edit', (req, res) => {
+router.get('/campgrounds/:id/comments/:comment_id/edit', middleware.checkCommentsOwnership, (req, res) => {
     Comment.findById(req.params.comment_id, (error, foundComment) => {
         if (error) {
             res.redirect('back');
@@ -45,7 +46,7 @@ router.get('/campgrounds/:id/comments/:comment_id/edit', (req, res) => {
     })
 });
 
-router.put('/campgrounds/:id/comments/:comment_id', (req, res) => {
+router.put('/campgrounds/:id/comments/:comment_id', middleware.checkCommentsOwnership, (req, res) => {
     Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, (error, updatedComment) => {
         if (error) {
             res.redirect('back');
@@ -56,11 +57,14 @@ router.put('/campgrounds/:id/comments/:comment_id', (req, res) => {
     });
 });
 
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next();
-    }
-    res.redirect('/login');
-}
+router.delete('/campgrounds/:id/comments/:comment_id', middleware.checkCommentsOwnership, (req, res) => {
+    Comment.findByIdAndRemove(req.params.comment_id, error => {
+        if (error) {
+            res.redirect('back');
+        } else {
+            res.redirect('/campgrounds/' + req.params.id);
+        }
+    });
+});
 
 module.exports = router;
