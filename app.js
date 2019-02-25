@@ -1,22 +1,24 @@
-const express    = require('express'),
-      app        = express(),
-      bodyParser = require('body-parser'),
-      port       = 3000,
-      mongoose   = require('mongoose'),
-      passport   = require('passport'),
-      localStrategy = require('passport-local'),
-      Campground = require('./models/campground'),
-      Comment    = require('./models/comment'),
-      User       = require('./models/user'),
-      seedDB     = require('./seeds'),
-      commentRoutes = require('./routes/comments'),
+const express          = require('express'),
+      app              = express(),
+      bodyParser       = require('body-parser'),
+      port             = 3000,
+      mongoose         = require('mongoose'),
+      passport         = require('passport'),
+      localStrategy    = require('passport-local'),
+      methodOverride   = require('method-override');
+      Campground       = require('./models/campground'),
+      Comment          = require('./models/comment'),
+      User             = require('./models/user'),
+      seedDB           = require('./seeds'),
+      commentRoutes    = require('./routes/comments'),
       campgroundRoutes = require('./routes/campgrounds'),
-      indexRoutes = require('./routes/index');
+      indexRoutes      = require('./routes/index');
 
 // seedDB();
 mongoose.connect('mongodb://localhost:27017/canopy', {useNewUrlParser: true});
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + '/public'));
+app.use(methodOverride('_method'));
 app.set('view engine', 'ejs');
 
 app.use(require('express-session')({
