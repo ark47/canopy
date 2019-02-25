@@ -3,6 +3,7 @@ const express          = require('express'),
       bodyParser       = require('body-parser'),
       port             = 3000,
       mongoose         = require('mongoose'),
+      flash            = require('connect-flash'),
       passport         = require('passport'),
       localStrategy    = require('passport-local'),
       methodOverride   = require('method-override');
@@ -19,6 +20,7 @@ mongoose.connect('mongodb://localhost:27017/canopy', {useNewUrlParser: true});
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + '/public'));
 app.use(methodOverride('_method'));
+app.use(flash());
 app.set('view engine', 'ejs');
 
 app.use(require('express-session')({
@@ -34,6 +36,7 @@ passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
     res.locals.currentUser = req.user;
+    res.locals.message = req.flash('error');
     next();
 });
 
